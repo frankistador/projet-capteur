@@ -36,8 +36,8 @@ public class Fenetre extends JFrame {
 		// Paramètres généraux de la fenêtre
 		this.setTitle("Simulateur de capteurs");
 		this.setSize(765,145);
-		this.setResizable(false);
-		this.getContentPane().setLayout(new FlowLayout());
+		//this.setResizable(false);
+		this.getContentPane().setLayout(new BoxLayout(this.getContentPane(), BoxLayout.PAGE_AXIS));
 		
 		
 		//Création du panel d'en-tête
