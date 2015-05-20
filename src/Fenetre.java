@@ -1,15 +1,15 @@
 import java.awt.FlowLayout;
-import javax.swing.BoxLayout;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.*;
+
+
 
 	
 
 
-public class Fenetre extends JFrame {
+public class Fenetre extends JFrame implements ActionListener {
 	
 	private JTextField tf_nbrAleatoire;
 	private JTextField tf_rayonAleatoire;
@@ -26,8 +26,9 @@ public class Fenetre extends JFrame {
 	
 	public static void main(String argv[]) {
 
-	    Fenetre fenetreDeMenu = new Fenetre();
+		Fenetre fenetreDeMenu = new Fenetre();
 	    fenetreDeMenu.setVisible(true);
+
 	  }
 	
 	
@@ -36,7 +37,6 @@ public class Fenetre extends JFrame {
 		// Paramètres généraux de la fenêtre
 		this.setTitle("Simulateur de capteurs");
 		this.setSize(765,145);
-		//this.setResizable(false);
 		this.getContentPane().setLayout(new BoxLayout(this.getContentPane(), BoxLayout.PAGE_AXIS));
 		
 		
@@ -73,6 +73,7 @@ public class Fenetre extends JFrame {
 		
 		bu_aleatoire = new JButton("Placer aléatoirement");
 		panelAleatoire.add(bu_aleatoire);
+		bu_aleatoire.addActionListener(this);
 		
 		this.getContentPane().add(panelAleatoire);
 		
@@ -93,5 +94,34 @@ public class Fenetre extends JFrame {
 		
 		this.getContentPane().add(panelManuel);
 		
+	}
+
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		
+		int valeur_nbrCapteurs = 0;
+		int valeur_rayon = 0;
+		
+		try 
+			{ 
+				valeur_nbrCapteurs = Integer.parseInt(tf_nbrAleatoire.getText());
+				valeur_rayon = Integer.parseInt(tf_rayonAleatoire.getText());
+				Simulation fenetreCapteurs = new Simulation("Simulation", valeur_nbrCapteurs, valeur_rayon);
+				fenetreCapteurs.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+				fenetreCapteurs.setSize(1000,1000);
+				
+				fenetreCapteurs.setVisible(true);
+			}
+		catch(NumberFormatException nb){
+			
+			JOptionPane.showMessageDialog(null, "Veuillez saisir un entier pour le nombre de capteurs et la valeur du rayon !");
+		}
+		
+		
+	
+			
+			
+			
 	}
 }
