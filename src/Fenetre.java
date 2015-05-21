@@ -1,8 +1,15 @@
+import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.*;
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
 
 
 
@@ -39,7 +46,6 @@ public class Fenetre extends JFrame implements ActionListener {
 		this.setSize(765,145);
 		this.getContentPane().setLayout(new BoxLayout(this.getContentPane(), BoxLayout.PAGE_AXIS));
 		
-		
 		//Création du panel d'en-tête
 		JPanel panelMenu = new JPanel();
 		BoxLayout bl = new BoxLayout(panelMenu, BoxLayout.PAGE_AXIS);
@@ -49,7 +55,7 @@ public class Fenetre extends JFrame implements ActionListener {
 		lb_menu = new JLabel("MENU");
 		panelMenu.add(lb_menu);
 		
-		this.getContentPane().add(panelMenu);
+		
 		
 		
 		//Création du panel du placement aléatoire des points 		
@@ -75,7 +81,7 @@ public class Fenetre extends JFrame implements ActionListener {
 		panelAleatoire.add(bu_aleatoire);
 		bu_aleatoire.addActionListener(this);
 		
-		this.getContentPane().add(panelAleatoire);
+		panelMenu.add(panelAleatoire);
 		
 		
 		//Création du panel du placement manuel
@@ -91,8 +97,18 @@ public class Fenetre extends JFrame implements ActionListener {
 		
 		bu_manuel = new JButton("Placer manuellement");
 		panelManuel.add(bu_manuel);
+		panelMenu.add(panelManuel);
 		
-		this.getContentPane().add(panelManuel);
+		//Panel Principal
+		JPanel panelPrincipal = new JPanel();
+		BorderLayout borderL = new BorderLayout();
+		panelPrincipal.setLayout(borderL);
+		panelPrincipal.add(panelMenu, BorderLayout.PAGE_START);
+		this.getContentPane().add(panelPrincipal);
+		
+		//Panel d'affichage des points
+		JButton button = new JButton("BUTTON");
+		panelPrincipal.add(button, BorderLayout.CENTER);		
 		
 	}
 
