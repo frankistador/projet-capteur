@@ -1,10 +1,8 @@
 import java.awt.Graphics;
-
-import javax.swing.*;
-
-import java.awt.*;
-import java.awt.event.*;
+import java.awt.Graphics2D;
 import java.util.LinkedList;
+
+import javax.swing.JPanel;
 
 public class Dessin extends JPanel {
 
@@ -32,6 +30,17 @@ public class Dessin extends JPanel {
 	        threads.add(newCapteur);
 	        newCapteur.start();
 	    }
+	  
+	  public void addCapteur(Capteur capteur)
+	    {
+	        threads.add(capteur);
+	        capteur.start();
+	    }
 	
+	  public void clean(){
+		  threads.clear();
+	  }
+	  
+	  
 }
 

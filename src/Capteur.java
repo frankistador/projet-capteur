@@ -1,11 +1,7 @@
 import java.awt.Color;
-import java.awt.Graphics;
 import java.awt.Graphics2D;
 
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-
-public class Capteur extends Thread {
+public class Capteur extends Thread  {
 
 	private int idCapteur;
 	private String nameCapteur;
@@ -19,6 +15,14 @@ public class Capteur extends Thread {
 		this.nameCapteur = nameCapteur;
 		this.coordX = (int)(Math.random()*(600 - 300 +1)) + 300;
 		this.coordY = (int)(Math.random()*(600 - 300 +1)) + 300;
+		this.rayon = rayon;
+	}
+	
+	public Capteur(int idCapteur, String nameCapteur, int rayon, int coordX, int coordY) {
+		this.idCapteur = idCapteur;
+		this.nameCapteur = nameCapteur;
+		this.coordX = coordX;
+		this.coordY = coordY;
 		this.rayon = rayon;
 	}
 		
