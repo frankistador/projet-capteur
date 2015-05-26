@@ -114,11 +114,13 @@ public class Fenetre extends JFrame implements ActionListener {
 		int valeur_nbrCapteurs = 0;
 		int valeur_rayon = 0;
 		
-		if(panelPrincipal.getComponents().length == 2)
-			 panelPrincipal.remove(1);
-		
+		if(panelPrincipal.getComponents().length == 2){
+		panelPrincipal.remove(1);
 		panelPrincipal.revalidate();
 		panelPrincipal.repaint();
+		}
+		
+		
 				
 		try 
 			{ 
@@ -128,8 +130,9 @@ public class Fenetre extends JFrame implements ActionListener {
 			    Dessin window = new Dessin();
 				for(int i = 0;i<valeur_nbrCapteurs;i++){
 			       name = "Capteur"+i;
-			        window.addCapteur(name, valeur_rayon, i);
+			        window.addCapteur(name, valeur_rayon, i,false);
 				}	
+				window.lancementSimulation();
 			panelPrincipal.add(window,BorderLayout.CENTER);
 			this.setSize(800, 945);
 			panelPrincipal.repaint();
