@@ -39,18 +39,32 @@ public class Dessin extends JPanel {
 	    }
 	  
 	  public void lancementSimulation()
-	  {	      	        
+	  {	      	
+		  int cpt = 0;
 	        for(int i=0;i < threads.size();i++){
-	        	if(!threads.get(i).isBip()){
+	        	
 	        	for(int j=0;j < threads.size();j++){
 	        		if(i != j){   
 		        	if(threads.get(i).getCircle().contains(threads.get(j).getCoordX(),threads.get(j).getCoordY()) && threads.get(j).isBip()){	        		
-	        			threads.get(i).setReceiving(true);
+		        		if(!threads.get(i).isBip()){
+		        		threads.get(i).setReceiving(true);
+	        			cpt++;
+		        		}
+		        		else
+		        		{
+		        		threads.get(i).setInternalCollision(true);
+		        		}
 		        	}
 	        		}
 	        }
-	        	}	        	
+	        	if(cpt > 1){
+	        		threads.get(i).setPeripheralCollision(true);
+	        		threads.get(i).setReceiving(false);	        		
+	        	}
+	        	cpt=0;
+	        		        	
 	        }
+	        	        
 
 	  }
 	  

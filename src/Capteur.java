@@ -24,6 +24,8 @@ public class Capteur extends Thread {
 	private boolean bip;
 	private Circle circle;
 	private boolean receiving = false;
+	private boolean peripheralCollision = false;
+	private boolean internalCollision = false;
 
 	public Capteur(int idCapteur, String nameCapteur, int rayon,boolean bip) {
 		this.idCapteur = idCapteur;
@@ -41,7 +43,6 @@ public class Capteur extends Thread {
 		
 		if(this.isBip()){
              g.setColor(Color.RED);
-             g.drawString("BIP BIP !", coordX, coordY);
 		}
 		else
 		{
@@ -53,8 +54,15 @@ public class Capteur extends Thread {
 				g.drawString("reception", coordX, coordY);
 			}
 		
+			if(this.isPeripheralCollision()){
+				g.drawString("PERIPHERAL COLLISION", coordX - 5, coordY - 10);
+			}
+			
+			if(this.isInternalCollision()){
+				g.drawString("INTERNAL COLLISION", coordX - 5, coordY - 10);
+			}
 	    
-        g.draw(new Rectangle2D.Double(coordX, coordY, 1, 1));	
+        g.draw(new Rectangle2D.Double(coordX-2, coordY-2, 3, 3));	
         this.circle.draw(g);
         
         
@@ -171,6 +179,23 @@ public class Capteur extends Thread {
 		this.receiving = receiving;
 	}
 
+	public boolean isPeripheralCollision() {
+		return peripheralCollision;
+	}
+
+	public void setPeripheralCollision(boolean peripheralCollision) {
+		this.peripheralCollision = peripheralCollision;
+	}
+
+	public boolean isInternalCollision() {
+		return internalCollision;
+	}
+
+	public void setInternalCollision(boolean internalCollision) {
+		this.internalCollision = internalCollision;
+	}
+
+	//La fonction run du thread
 	public void run()
 	{
 			
