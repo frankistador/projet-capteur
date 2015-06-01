@@ -235,7 +235,7 @@ public class Fenetre extends JFrame implements ActionListener {
 						int mouseX = me.getX();
 						int mouseY = me.getY();
 
-						Capteur capteur = new Capteur(rang_capteur, "Capteur "+ rang_capteur, valeur_rayon, mouseX, mouseY,false);
+						Capteur capteur = new Capteur(rang_capteur, "Capteur "+ rang_capteur, valeur_rayon, mouseX, mouseY);
 						capteur.setHauteur_panel(hauteur_panel);
 						capteur.setLargeur_panel(largeur_panel);
 						window.addCapteur(capteur);
@@ -265,7 +265,7 @@ public class Fenetre extends JFrame implements ActionListener {
 		}
 		
 		if(e.getActionCommand().equals(bu_simul.getActionCommand()))  {
-			window.lancementSimulation();
+			Dessin.setDessinSimul(true);
 			panelPrincipal.revalidate();
 			panelPrincipal.repaint();
 		}

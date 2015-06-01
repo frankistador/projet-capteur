@@ -29,39 +29,39 @@ public class Capteur extends Thread {
 	private int largeur_panel;
 	private int hauteur_panel;
 
-	public Capteur(int idCapteur, String nameCapteur, int rayon,boolean bip) {
+	public Capteur(int idCapteur, String nameCapteur, int rayon) {
+			
 		this.idCapteur = idCapteur;
 		this.nameCapteur = nameCapteur;
 		this.coordX = (int)(Math.random()*Fenetre.getLargeur_panel());
 		this.coordY = (int)(Math.random()*Fenetre.getHauteur_panel());
 		this.rayon = rayon;
-		this.bip = bip;
 		this.circle = new Circle(coordX,coordY,rayon);
 	}
 	
-	public Capteur(int idCapteur, String nameCapteur, int rayon, int coordX, int coordY,boolean bip) {
+	public Capteur(int idCapteur, String nameCapteur, int rayon, int coordX, int coordY) {
+		
 		this.idCapteur = idCapteur;
 		this.nameCapteur = nameCapteur;
 		this.coordX = coordX;
 		this.coordY = coordY;
 		this.rayon = rayon;
-		this.bip = bip;
 		this.circle = new Circle(coordX,coordY,rayon);
 	}
 		
 	public synchronized void draw(Graphics2D g) 
     {
-
 		
 		if(this.isBip()){
-             g.setColor(Color.RED);
+            g.setColor(Color.RED);
 		}
 		else
 		{
 			g.setColor(Color.BLUE);
 		}
 		
-
+		if(Dessin.isDessinSimul()){
+	
 			if(this.isReceiving()){
 				g.drawString("reception", coordX, coordY);
 			}
@@ -73,7 +73,9 @@ public class Capteur extends Thread {
 			if(this.isInternalCollision()){
 				g.drawString("INTERNAL COLLISION", coordX - 5, coordY - 10);
 			}
-	    
+		}
+		    
+		
         g.draw(new Rectangle2D.Double(coordX-2, coordY-2, 3, 3));	
         this.circle.draw(g);
         
@@ -96,25 +98,14 @@ public class Capteur extends Thread {
 //		return capteursProches;
 //	}
 	
-	
-	public void beeping()
-	{
-			
-		this.bip = true;
-		
-	}
-	
-	
-		
-	public void ecouter()
-	{
-		this.bip = false;
-	}
-			
+				
 	public void calculer()
 	{
 		//Faire le lien avec la classe Algo et tous ses calculs
 	}
+	
+	           	        
+	  
 
 
 	public int getIdCapteur() {
@@ -225,10 +216,7 @@ public class Capteur extends Thread {
 		this.hauteur_panel = hauteur_panel;
 	}
 
-	//La fonction run du thread
-	public void run()
-	{
-			
+	public synchronized void pileOuface(){
 		double pileOuFace;
 		double probaDuBip = 0.5;
 		
@@ -236,21 +224,52 @@ public class Capteur extends Thread {
 		 
 			if(pileOuFace > probaDuBip)
 			{
-				this.beeping();
+				this.bip = true;
 			}
 			else
 			{
-				this.ecouter();
+				this.bip = false;
 			}
-
-			try {
-				Thread.sleep(5000);//5 secondes
 			
-			} catch (InterruptedException ex) {
-				Thread.currentThread().interrupt();					
-			}
+	}
 
+	public synchronized void beep(){
+		Beep.beep(this);
+	}
+
+	public synchronized void listen(){
+		Beep.listen(this);
+	}
+	
+	//La fonction run du thread
+	public void run()
+	{			
+	
+		this.pileOuface();
 		
+		try {
+			Thread.sleep(2000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		if(this.isBip()){
+			this.beep();
+		}
+		
+		try {
+			Thread.sleep(2000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		this.listen();
+
+		    		
+	    		
+		        
 			//---Test déplacement---
 //			System.out.println("Avant: "+this.coordX);
 //			this.setX(this.coordX +500);
