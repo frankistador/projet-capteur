@@ -15,19 +15,15 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-
-
-	
-
-
+@SuppressWarnings("serial")
 public class Fenetre extends JFrame implements ActionListener {
-	
+
 	private JTextField tf_nbrAleatoire;
 	private JTextField tf_rayonAleatoire;
 	private JTextField tf_rayonManuel;
 	private JTextField tf_largeur;
 	private JTextField tf_hauteur;
-	
+
 	private JLabel lb_menu;
 	private JLabel lb_aleatoire;
 	private JLabel lb_aleatoireSuite;
@@ -35,122 +31,127 @@ public class Fenetre extends JFrame implements ActionListener {
 	private JLabel lb_manuel;
 	private JLabel lb_x;
 	private JLabel lb_y;
-	
+
 	private JButton bu_aleatoire;
 	private JButton bu_manuel;
 	private JButton bu_clean;
 	private JButton bu_redim;
 	private JButton bu_simul;
-	
+
 	private JPanel panelPrincipal = new JPanel();
-	
-	private int rang_capteur = 0 ;
-	
-	public static int largeur_panel = 800 ;
-	public static int hauteur_panel = 800 ;
-	private int taille_menu = 230;
-	
+	private JPanel panelMenu = new JPanel();
+	private JPanel panelAleatoire = new JPanel();
+	private JPanel panelManuel = new JPanel();
+	private JPanel panelDimension = new JPanel();
+	private JPanel panelSimulation = new JPanel();
+
+	public static int largeur_panel = 800;
+	public static int hauteur_panel = 800;
+	private int taille_menu = 215;
+	private int rang_capteur = 0;
+
 	private Dessin window = new Dessin();
-	
+
+	private final int LARGEUR_MINIMUM = 800;
+	private final int HAUTEUR_MINIMUM = 800;
+
 	public static void main(String argv[]) {
 
 		Fenetre fenetreDeMenu = new Fenetre();
-	    fenetreDeMenu.setVisible(true);
+		fenetreDeMenu.setVisible(true);
 
-	 }
-	
-	
+	}
+
 	public Fenetre() {
 
 		// Paramètres généraux de la fenêtre
 		this.setTitle("Simulateur de capteurs");
-		this.setSize(largeur_panel,taille_menu);
+		this.setSize(largeur_panel, taille_menu);
 		this.setResizable(false);
 		this.getContentPane().setLayout(new BoxLayout(this.getContentPane(), BoxLayout.PAGE_AXIS));
-		
 		window.setBorder(BorderFactory.createLineBorder(Color.black));
-		
-		//Création du panel Menu
-		JPanel panelMenu = new JPanel();
+
+		// Création du panel Menu
+		panelMenu = new JPanel();
 		BoxLayout bl = new BoxLayout(panelMenu, BoxLayout.PAGE_AXIS);
 		panelMenu.setLayout(bl);
-		
-		//Label "MENU"
+
+		// Label "MENU"
 		lb_menu = new JLabel("MENU");
 		panelMenu.add(lb_menu);
-		
 
-		//Création du panel du placement aléatoire des points 		
-		JPanel panelAleatoire = new JPanel();
+		// Création du panel du placement aléatoire des points
+		panelAleatoire = new JPanel();
 		panelAleatoire.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
-		
+
 		// Labels, TextFields et Button
 		lb_aleatoire = new JLabel("Placer");
 		panelAleatoire.add(lb_aleatoire);
-		
+
 		tf_nbrAleatoire = new JTextField();
 		panelAleatoire.add(tf_nbrAleatoire);
 		tf_nbrAleatoire.setColumns(3);
-		
-		lb_aleatoireSuite = new JLabel("points aléatoirement avec un rayon de communication de :");
+
+		lb_aleatoireSuite = new JLabel(
+				"points aléatoirement avec un rayon de communication de :");
 		panelAleatoire.add(lb_aleatoireSuite);
-		
+
 		tf_rayonAleatoire = new JTextField();
 		panelAleatoire.add(tf_rayonAleatoire);
 		tf_rayonAleatoire.setColumns(3);
-		
+
 		bu_aleatoire = new JButton("Placer aléatoirement");
 		panelAleatoire.add(bu_aleatoire);
 		bu_aleatoire.addActionListener(this);
-		
+
 		panelMenu.add(panelAleatoire);
-		
-		
-		//Création du panel du placement manuel
-		JPanel panelManuel = new JPanel();
+
+		// Création du panel du placement manuel
+		panelManuel = new JPanel();
 		panelManuel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
-		
+
 		lb_manuel = new JLabel("Assigner les points manuellement avec un rayon de communication de :");
 		panelManuel.add(lb_manuel);
-		
+
 		tf_rayonManuel = new JTextField();
 		panelManuel.add(tf_rayonManuel);
 		tf_rayonManuel.setColumns(3);
-		
+
 		bu_manuel = new JButton("Placer manuellement");
 		panelManuel.add(bu_manuel);
 		bu_manuel.addActionListener(this);
 		panelMenu.add(panelManuel);
-		
-		//Redimensionner le panel
-		JPanel panelDimension = new JPanel();
+
+		// Creation du panel de redimension
+		panelDimension = new JPanel();
 		panelDimension.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
-		
+
+		// Labels, TextField, Button
 		lb_redim = new JLabel("Taille de la fenêtre :");
 		panelDimension.add(lb_redim);
-		
+
 		tf_largeur = new JTextField();
 		panelDimension.add(tf_largeur);
 		tf_largeur.setColumns(4);
 		tf_largeur.setText("800");
-		
+
 		tf_hauteur = new JTextField();
 		panelDimension.add(tf_hauteur);
 		tf_hauteur.setColumns(4);
 		tf_hauteur.setText("800");
-		
+
 		bu_redim = new JButton("Redimensionner");
 		panelDimension.add(bu_redim);
 		bu_redim.addActionListener(this);
 		panelMenu.add(panelDimension);
-		
+
 		lb_x = new JLabel("X : ");
 		panelMenu.add(lb_x);
 		lb_y = new JLabel("Y : ");
 		panelMenu.add(lb_y);
-		
-		//Panel Simulation
-		JPanel panelSimulation = new JPanel();
+
+		// Creation du panel de simulation
+		panelSimulation = new JPanel();
 		panelSimulation.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 		bu_simul = new JButton("Lancer la simulation");
 		panelSimulation.add(bu_simul);
@@ -158,33 +159,29 @@ public class Fenetre extends JFrame implements ActionListener {
 		bu_clean = new JButton("Clean");
 		panelSimulation.add(bu_clean);
 		bu_clean.addActionListener(this);
+
 		panelMenu.add(panelSimulation);
 
-			
-		//Panel Principal
+		// Panel Principal
 		BorderLayout borderL = new BorderLayout();
 		panelPrincipal.setLayout(borderL);
+
 		panelPrincipal.add(panelMenu, BorderLayout.PAGE_START);
 		this.getContentPane().add(panelPrincipal);
-				
-	
+
 	}
-
 	
-	public void redimensionner (int larg, int haut){
-		this.setSize(larg, haut);
-	}
-
-
+	
+	//Definition des actions lors d'un evenement
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		
-		
+		//Affichage des coordonnées lorsque la souris se déplace sur le graphe
 		window.addMouseMotionListener(new MouseAdapter() {
 
 			public void mouseMoved(MouseEvent me) {
-				lb_x.setText("X : "+me.getX());
-				lb_y.setText("Y : "+me.getY());
+				lb_x.setText("X : " + me.getX());
+				lb_y.setText("Y : " + me.getY());
 				lb_x.setVisible(true);
 				lb_y.setVisible(true);
 			}
@@ -200,17 +197,17 @@ public class Fenetre extends JFrame implements ActionListener {
 				valeur_nbrCapteurs = Integer.parseInt(tf_nbrAleatoire.getText());
 				valeur_rayon = Integer.parseInt(tf_rayonAleatoire.getText());
 				String name;
-				
-				int somme = valeur_nbrCapteurs+rang_capteur ;
-				
+
+				int somme = valeur_nbrCapteurs + rang_capteur;
+
 				for (int i = rang_capteur; i < somme; i++) {
-										
+
 					name = "Capteur" + rang_capteur;
-					window.addCapteur(name, valeur_rayon, rang_capteur,false);
+					window.addCapteur(name, valeur_rayon, rang_capteur, false);
 					rang_capteur += 1;
 				}
 				panelPrincipal.add(window, BorderLayout.CENTER);
-				this.setSize(largeur_panel, hauteur_panel + taille_menu);
+				this.redimensionner();
 				panelPrincipal.repaint();
 
 			} catch (NumberFormatException nb) {
@@ -224,9 +221,9 @@ public class Fenetre extends JFrame implements ActionListener {
 		if (e.getActionCommand().equals(bu_manuel.getActionCommand())) {
 
 			try {
-
+				Integer.parseInt(tf_rayonManuel.getText());
 				panelPrincipal.add(window, BorderLayout.CENTER);
-				this.setSize(largeur_panel, hauteur_panel + taille_menu);
+				this.redimensionner();
 				window.addMouseListener(new MouseAdapter() {
 
 					public void mouseClicked(MouseEvent me) {
@@ -234,17 +231,14 @@ public class Fenetre extends JFrame implements ActionListener {
 
 						int mouseX = me.getX();
 						int mouseY = me.getY();
-
 						Capteur capteur = new Capteur(rang_capteur, "Capteur "+ rang_capteur, valeur_rayon, mouseX, mouseY,false);
-						capteur.setHauteur_panel(hauteur_panel);
-						capteur.setLargeur_panel(largeur_panel);
 						window.addCapteur(capteur);
 						rang_capteur += 1;
 						panelPrincipal.revalidate();
 						panelPrincipal.repaint();
-						
+
 					}
-				
+
 				});
 
 				panelPrincipal.repaint();
@@ -261,57 +255,49 @@ public class Fenetre extends JFrame implements ActionListener {
 
 			window.clean();
 			panelPrincipal.repaint();
-
 		}
-		
-		if(e.getActionCommand().equals(bu_simul.getActionCommand()))  {
+
+		//Pression du button "Lancer Simulation"
+		if (e.getActionCommand().equals(bu_simul.getActionCommand())) {
 			window.lancementSimulation();
 			panelPrincipal.revalidate();
 			panelPrincipal.repaint();
 		}
-		
-		//pression du button "Redimensionner"
+
+		// Pression du button "Redimensionner"
 		if (e.getActionCommand().equals(bu_redim.getActionCommand())) {
 			largeur_panel = Integer.parseInt(tf_largeur.getText());
 			hauteur_panel = Integer.parseInt(tf_hauteur.getText());
-			
-			if (largeur_panel < 800) { 
+
+			if (largeur_panel < LARGEUR_MINIMUM) {
 				JOptionPane.showMessageDialog(null,"Veuillez saisir une largeur supérieure à 800 !");
-			}
-			else {
-				int n = JOptionPane.showConfirmDialog(null, "Attention cette opération va réinitialiser le plan", "Avertissement", JOptionPane.OK_CANCEL_OPTION);
 				
-				if(n == JOptionPane.OK_OPTION){ 
+			} else if (hauteur_panel < HAUTEUR_MINIMUM) {
+				JOptionPane.showMessageDialog(null,"Veuillez saisir une hauteur supérieure à 800 !");
+				
+			} else {
+				int n = JOptionPane.showConfirmDialog(null,"Attention cette opération va réinitialiser le plan","Avertissement", JOptionPane.OK_CANCEL_OPTION);
+
+				if (n == JOptionPane.OK_OPTION) {
 					window.clean();
 					window.redimensionner(largeur_panel, hauteur_panel);
-					this.redimensionner(hauteur_panel, hauteur_panel + taille_menu); 
-			    }			
-				
-			}
+					this.redimensionner();
+				}
 
-			
+			}
 		}
 	}
-
-	
 
 	public static int getLargeur_panel() {
 		return largeur_panel;
 	}
 
-
-	public void setLargeur_panel(int largeur_panel) {
-		this.largeur_panel = largeur_panel;
-	}
-
-
 	public static int getHauteur_panel() {
 		return hauteur_panel;
 	}
 
-
-	public void setHauteur_panel(int hauteur_panel) {
-		this.hauteur_panel = hauteur_panel;
+	public void redimensionner() {
+		int hauteur_totale = hauteur_panel + taille_menu;
+		this.setSize(largeur_panel, hauteur_totale);
 	}
-	
 }
