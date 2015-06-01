@@ -8,6 +8,7 @@ public class Dessin extends JPanel {
 
 	private Capteur newCapteur;
     private LinkedList<Capteur> threads = new LinkedList<Capteur>();
+    private static boolean dessinSimul = false;
     
     public Dessin(){
     	
@@ -20,15 +21,19 @@ public class Dessin extends JPanel {
 	        java.util.ListIterator<Capteur> it = threads.listIterator();
 	        while(it.hasNext())
 	        {
-	           it.next().draw(g2D);
+	        		it.next().draw(g2D);
+	        		
 	        }
+	        
+	        Dessin.setDessinSimul(false);
 	    }
 	  
-	  public void addCapteur(String name,int rayon,int id)
+	  public void addCapteur(String name,int rayon,int id,boolean bip)
 	    {
-	        newCapteur = new Capteur(id,name,rayon);
-	        threads.add(newCapteur);
+	        newCapteur = new Capteur(id,name,rayon);	     
+	        threads.add(newCapteur);    
 	        newCapteur.start();
+	     
 	    }
 	  
 	  public void addCapteur(Capteur capteur)
@@ -36,11 +41,32 @@ public class Dessin extends JPanel {
 	        threads.add(capteur);
 	        capteur.start();
 	    }
-	
-	  public void clean(){
-		  threads.clear();
-	  }
 	  
+	  
+	public void redimensionner(int larg, int haut) {
+		this.setSize(larg,haut);
+		
+	}
+
+	public static boolean isDessinSimul() {
+		return dessinSimul;
+	}
+
+	public static void setDessinSimul(boolean dessinSimul) {
+		Dessin.dessinSimul = dessinSimul;
+	}
+	  
+	  	    
+	  public void clean(){
+		   java.util.ListIterator<Capteur> it = threads.listIterator();
+	        while(it.hasNext())
+	        {
+	        		it.next().interrupt();
+	        		
+	        }
+		  threads.clear();
+		  Beep.clear();
+	  }
 	  
 }
 
