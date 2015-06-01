@@ -222,17 +222,14 @@ public class Capteur extends Thread {
 		// Tests if the specified coordinates are inside the boundary of the
 		// Shape
 		public boolean contains(double x, double y) {
-			return this.getRadius() / 2 >= Math
-					.sqrt((Math.pow((x - this.x), 2) + (Math.pow((y - this.y),
-							2))));
+			return this.getRadius() / 2 >= Math.sqrt((Math.pow((x - this.x), 2) + (Math.pow((y - this.y),2))));
 
 		}
 
 		// Tests if the interior of the Shape entirely contains the specified
 		// rectangular area
 		public boolean contains(double x, double y, double w, double h) {
-			if (this.contains(x, y) && this.contains(x + w, y)
-					&& this.contains(x + w, y + h) && this.contains(x, y + h)) {
+			if (this.contains(x, y) && this.contains(x + w, y) && this.contains(x + w, y + h) && this.contains(x, y + h)) {
 				return true;
 			} else {
 				return false;

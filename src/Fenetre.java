@@ -203,7 +203,7 @@ public class Fenetre extends JFrame implements ActionListener {
 				for (int i = rang_capteur; i < somme; i++) {
 
 					name = "Capteur" + rang_capteur;
-					window.addCapteur(name, valeur_rayon, rang_capteur, false);
+					window.addCapteur(name, valeur_rayon*2, rang_capteur, false);
 					rang_capteur += 1;
 				}
 				panelPrincipal.add(window, BorderLayout.CENTER);
@@ -231,7 +231,7 @@ public class Fenetre extends JFrame implements ActionListener {
 
 						int mouseX = me.getX();
 						int mouseY = me.getY();
-						Capteur capteur = new Capteur(rang_capteur, "Capteur "+ rang_capteur, valeur_rayon, mouseX, mouseY,false);
+						Capteur capteur = new Capteur(rang_capteur, "Capteur "+ rang_capteur, valeur_rayon*2, mouseX, mouseY,false);
 						window.addCapteur(capteur);
 						rang_capteur += 1;
 						panelPrincipal.revalidate();
