@@ -40,6 +40,7 @@ public class Fenetre extends JFrame implements ActionListener {
 	private JButton bu_manuel;
 	private JButton bu_clean;
 	private JButton bu_redim;
+	private JButton bu_simul;
 	
 	private JPanel panelPrincipal = new JPanel();
 	
@@ -47,7 +48,7 @@ public class Fenetre extends JFrame implements ActionListener {
 	
 	public static int largeur_panel = 800 ;
 	public static int hauteur_panel = 800 ;
-	private int taille_menu = 202;
+	private int taille_menu = 230;
 	
 	private Dessin window = new Dessin();
 	
@@ -143,20 +144,30 @@ public class Fenetre extends JFrame implements ActionListener {
 		bu_redim.addActionListener(this);
 		panelMenu.add(panelDimension);
 		
-		//Panel Principal
-		BorderLayout borderL = new BorderLayout();
-		panelPrincipal.setLayout(borderL);
-		panelPrincipal.add(panelMenu, BorderLayout.PAGE_START);
-		this.getContentPane().add(panelPrincipal);
-		
 		lb_x = new JLabel("X : ");
 		panelMenu.add(lb_x);
 		lb_y = new JLabel("Y : ");
 		panelMenu.add(lb_y);
 		
+		//Panel Simulation
+		JPanel panelSimulation = new JPanel();
+		panelSimulation.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+		bu_simul = new JButton("Lancer la simulation");
+		panelSimulation.add(bu_simul);
+		bu_simul.addActionListener(this);
 		bu_clean = new JButton("Clean");
-		panelMenu.add(bu_clean);
+		panelSimulation.add(bu_clean);
 		bu_clean.addActionListener(this);
+		panelMenu.add(panelSimulation);
+
+			
+		//Panel Principal
+		BorderLayout borderL = new BorderLayout();
+		panelPrincipal.setLayout(borderL);
+		panelPrincipal.add(panelMenu, BorderLayout.PAGE_START);
+		this.getContentPane().add(panelPrincipal);
+				
+	
 	}
 
 	
@@ -198,7 +209,6 @@ public class Fenetre extends JFrame implements ActionListener {
 					window.addCapteur(name, valeur_rayon, rang_capteur,false);
 					rang_capteur += 1;
 				}
-				window.lancementSimulation();
 				panelPrincipal.add(window, BorderLayout.CENTER);
 				this.setSize(largeur_panel, hauteur_panel + taille_menu);
 				panelPrincipal.repaint();
@@ -230,7 +240,6 @@ public class Fenetre extends JFrame implements ActionListener {
 						capteur.setLargeur_panel(largeur_panel);
 						window.addCapteur(capteur);
 						rang_capteur += 1;
-						window.lancementSimulation();
 						panelPrincipal.revalidate();
 						panelPrincipal.repaint();
 						
@@ -253,6 +262,12 @@ public class Fenetre extends JFrame implements ActionListener {
 			window.clean();
 			panelPrincipal.repaint();
 
+		}
+		
+		if(e.getActionCommand().equals(bu_simul.getActionCommand()))  {
+			window.lancementSimulation();
+			panelPrincipal.revalidate();
+			panelPrincipal.repaint();
 		}
 		
 		//pression du button "Redimensionner"
