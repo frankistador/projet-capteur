@@ -26,12 +26,24 @@ public class Capteur extends Thread {
 	private boolean receiving = false;
 	private boolean peripheralCollision = false;
 	private boolean internalCollision = false;
+	private int largeur_panel;
+	private int hauteur_panel;
 
 	public Capteur(int idCapteur, String nameCapteur, int rayon,boolean bip) {
 		this.idCapteur = idCapteur;
 		this.nameCapteur = nameCapteur;
-		this.coordX = (int)(Math.random()*(700 - 200 +1)) + 200;
-		this.coordY = (int)(Math.random()*(700 - 200 +1)) + 200;
+		this.coordX = (int)(Math.random()*Fenetre.getLargeur_panel());
+		this.coordY = (int)(Math.random()*Fenetre.getHauteur_panel());
+		this.rayon = rayon;
+		this.bip = bip;
+		this.circle = new Circle(coordX,coordY,rayon);
+	}
+	
+	public Capteur(int idCapteur, String nameCapteur, int rayon, int coordX, int coordY,boolean bip) {
+		this.idCapteur = idCapteur;
+		this.nameCapteur = nameCapteur;
+		this.coordX = coordX;
+		this.coordY = coordY;
 		this.rayon = rayon;
 		this.bip = bip;
 		this.circle = new Circle(coordX,coordY,rayon);
@@ -193,6 +205,24 @@ public class Capteur extends Thread {
 
 	public void setInternalCollision(boolean internalCollision) {
 		this.internalCollision = internalCollision;
+	}
+	
+	
+
+	public int getLargeur_panel() {
+		return largeur_panel;
+	}
+
+	public void setLargeur_panel(int largeur_panel) {
+		this.largeur_panel = largeur_panel;
+	}
+
+	public int getHauteur_panel() {
+		return hauteur_panel;
+	}
+
+	public void setHauteur_panel(int hauteur_panel) {
+		this.hauteur_panel = hauteur_panel;
 	}
 
 	//La fonction run du thread

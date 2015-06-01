@@ -38,6 +38,21 @@ public class Dessin extends JPanel {
 	     
 	    }
 	  
+	  public void addCapteur(Capteur capteur)
+	    {
+	        threads.add(capteur);
+	        capteur.start();
+	    }
+	  
+	  public void clean(){
+		  threads.clear();
+	  }
+
+	public void redimensionner(int larg, int haut) {
+		this.setSize(larg,haut);
+		
+	}
+	  
 	  public void lancementSimulation()
 	  {	      	
 		  int cpt = 0;
