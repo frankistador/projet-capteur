@@ -1,11 +1,10 @@
 import java.awt.Color;
 import java.awt.Graphics2D;
-import java.awt.Rectangle;
-import java.awt.Shape;
-import java.awt.geom.AffineTransform;
-import java.awt.geom.PathIterator;
-import java.awt.geom.Point2D;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.geom.Rectangle2D;
+
+import javax.swing.Timer;
 
 public class Capteur extends Thread {
 
@@ -22,6 +21,9 @@ public class Capteur extends Thread {
 	private boolean internalCollision = false;
 
 	private Circle circle;
+	private Timer timer;
+	private Circle waveOne;
+
 
 	//Constructeur avec coordonnees aleatoires
 	public Capteur(int idCapteur, String nameCapteur, int rayon, boolean bip) {
@@ -31,7 +33,10 @@ public class Capteur extends Thread {
 		this.coordY = (int) (Math.random() * Fenetre.getHauteur_panel());
 		this.rayon = rayon;
 		this.bip = bip;
-		this.circle = new Circle(coordX, coordY, rayon);
+		this.circle = new Circle(coordX, coordY, rayon,false);
+		this.waveOne = new Circle(coordX,coordY,rayon,true);
+		this.timer = createTimer();
+		timer.start();
 	}
 	
 	
@@ -43,13 +48,17 @@ public class Capteur extends Thread {
 		this.coordY = coordY;
 		this.rayon = rayon;
 		this.bip = bip;
-		this.circle = new Circle(coordX, coordY, rayon);
+		this.circle = new Circle(coordX,coordY,rayon,false);
+		this.waveOne = new Circle(coordX,coordY,rayon,true);
+		this.timer = createTimer();
+		timer.start();
 	}
 
 	public synchronized void draw(Graphics2D g) {
 
 		if (this.isBip()) {
 			g.setColor(Color.RED);
+			this.waveOne.draw(g);
 		} else {
 			g.setColor(Color.BLUE);
 		}
@@ -85,6 +94,41 @@ public class Capteur extends Thread {
 	//
 	// return capteursProches;
 	// }
+	
+	private Timer createTimer() {
+		
+		ActionListener action = new ActionListener() {
+			
+			//Méthode pour chaque tic de timer
+			public void actionPerformed (ActionEvent event)
+			{
+				move();				
+			}
+
+		};
+
+		return new Timer(500, action);
+	}
+	
+	int vitesse = 50;
+	public void move()
+	{
+//		int move;
+//		if(this.coordX >= Fenetre.getLargeur_panel())
+//		{
+//			vitesse = -vitesse;
+//		}
+//		if(this.coordX <= 500)
+//		{
+//			vitesse = +vitesse;
+//		}
+//		move = vitesse;
+//		this.setCoordX(this.coordX+move);
+		
+		
+		//this.setCoordY(coordY+10);
+	}
+	
 
 	public void beeping() {
 
@@ -182,25 +226,28 @@ public class Capteur extends Thread {
 
 	// La fonction run du thread
 	public void run() {
+		
+		while(true) {
 
-		double pileOuFace;
-		double probaDuBip = 0.5;
+			double pileOuFace;
+			double probaDuBip = 0.5;
+	
+			pileOuFace = Math.random();
+	
+			if (pileOuFace > probaDuBip) {
+				this.beeping();
+			} else {
+				this.ecouter();
+			}
+	
+			try {
+				Thread.sleep(5000);// 5 secondes
+	
+			} catch (InterruptedException ex) {
+				Thread.currentThread().interrupt();
+			}
 
-		pileOuFace = Math.random();
-
-		if (pileOuFace > probaDuBip) {
-			this.beeping();
-		} else {
-			this.ecouter();
 		}
-
-		try {
-			Thread.sleep(5000);// 5 secondes
-
-		} catch (InterruptedException ex) {
-			Thread.currentThread().interrupt();
-		}
-
 		// ---Test déplacement---
 		// System.out.println("Avant: "+this.coordX);
 		// this.setX(this.coordX +500);
@@ -210,112 +257,6 @@ public class Capteur extends Thread {
 
 	}
 
-	public class Circle implements Shape {
-		private double x, y, radius;
 
-		public Circle(double x, double y, double radius) {
-			this.x = x;
-			this.y = y;
-			this.radius = radius;
-		}
-
-		// Tests if the specified coordinates are inside the boundary of the
-		// Shape
-		public boolean contains(double x, double y) {
-			return this.getRadius() / 2 >= Math.sqrt((Math.pow((x - this.x), 2) + (Math.pow((y - this.y),2))));
-
-		}
-
-		// Tests if the interior of the Shape entirely contains the specified
-		// rectangular area
-		public boolean contains(double x, double y, double w, double h) {
-			if (this.contains(x, y) && this.contains(x + w, y) && this.contains(x + w, y + h) && this.contains(x, y + h)) {
-				return true;
-			} else {
-				return false;
-			}
-		}
-
-		public boolean contains(Point2D p) {
-			if (this.contains(p.getX(), p.getY())) {
-				return true;
-			} else {
-				return false;
-			}
-		}
-
-		public void draw(Graphics2D g) {
-			g.drawOval((int) x - (int) radius / 2, (int) y - (int) radius / 2,
-					(int) radius, (int) radius);
-		}
-
-		@Override
-		public Rectangle getBounds() {
-			// TODO Auto-generated method stub
-			return null;
-		}
-
-		@Override
-		public Rectangle2D getBounds2D() {
-			// TODO Auto-generated method stub
-			return null;
-		}
-
-		@Override
-		public boolean intersects(double x, double y, double w, double h) {
-			// TODO Auto-generated method stub
-			return false;
-		}
-
-		@Override
-		public boolean intersects(Rectangle2D r) {
-			// TODO Auto-generated method stub
-			return false;
-		}
-
-		@Override
-		public boolean contains(Rectangle2D r) {
-			return this.contains(r.getX(), r.getY(), r.getWidth(),
-					r.getHeight());
-
-		}
-
-		@Override
-		public PathIterator getPathIterator(AffineTransform at) {
-			// TODO Auto-generated method stub
-			return null;
-		}
-
-		@Override
-		public PathIterator getPathIterator(AffineTransform at, double flatness) {
-			// TODO Auto-generated method stub
-			return null;
-		}
-
-		public double getX() {
-			return x;
-		}
-
-		public void setX(double x) {
-			this.x = x;
-		}
-
-		public double getY() {
-			return y;
-		}
-
-		public void setY(double y) {
-			this.y = y;
-		}
-
-		public double getRadius() {
-			return radius;
-		}
-
-		public void setRadius(double radius) {
-			this.radius = radius;
-		}
-
-	}
 
 }

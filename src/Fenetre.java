@@ -14,6 +14,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.Timer;
 
 @SuppressWarnings("serial")
 public class Fenetre extends JFrame implements ActionListener {
@@ -51,6 +52,8 @@ public class Fenetre extends JFrame implements ActionListener {
 	private int rang_capteur = 0;
 
 	private Dessin window = new Dessin();
+	
+	private Timer t = new Timer(5, this);
 
 	private final int LARGEUR_MINIMUM = 800;
 	private final int HAUTEUR_MINIMUM = 800;
@@ -156,7 +159,7 @@ public class Fenetre extends JFrame implements ActionListener {
 		bu_simul = new JButton("Lancer la simulation");
 		panelSimulation.add(bu_simul);
 		bu_simul.addActionListener(this);
-		bu_clean = new JButton("Clean");
+		bu_clean = new JButton("Stop & Clean");
 		panelSimulation.add(bu_clean);
 		bu_clean.addActionListener(this);
 
@@ -187,105 +190,118 @@ public class Fenetre extends JFrame implements ActionListener {
 			}
 		});
 
-		// Pression du button "Placer aleatoirement"
-		if (e.getActionCommand().equals(bu_aleatoire.getActionCommand())) {
-
-			int valeur_nbrCapteurs = 0;
-			int valeur_rayon = 0;
-
-			try {
-				valeur_nbrCapteurs = Integer.parseInt(tf_nbrAleatoire.getText());
-				valeur_rayon = Integer.parseInt(tf_rayonAleatoire.getText());
-				String name;
-
-				int somme = valeur_nbrCapteurs + rang_capteur;
-
-				for (int i = rang_capteur; i < somme; i++) {
-
-					name = "Capteur" + rang_capteur;
-					window.addCapteur(name, valeur_rayon*2, rang_capteur, false);
-					rang_capteur += 1;
-				}
-				panelPrincipal.add(window, BorderLayout.CENTER);
-				this.redimensionner();
-				panelPrincipal.repaint();
-
-			} catch (NumberFormatException nb) {
-
-				JOptionPane.showMessageDialog(null,"Veuillez saisir un entier pour le nombre de capteurs et la valeur du rayon du mode aléatoire !");
-			}
-
-		}
-
-		// Pression du button "Placer manuellement"
-		if (e.getActionCommand().equals(bu_manuel.getActionCommand())) {
-
-			try {
-				Integer.parseInt(tf_rayonManuel.getText());
-				panelPrincipal.add(window, BorderLayout.CENTER);
-				this.redimensionner();
-				window.addMouseListener(new MouseAdapter() {
-
-					public void mouseClicked(MouseEvent me) {
-						int valeur_rayon = Integer.parseInt(tf_rayonManuel.getText());
-
-						int mouseX = me.getX();
-						int mouseY = me.getY();
-						Capteur capteur = new Capteur(rang_capteur, "Capteur "+ rang_capteur, valeur_rayon*2, mouseX, mouseY,false);
-						window.addCapteur(capteur);
-						rang_capteur += 1;
-						panelPrincipal.revalidate();
-						panelPrincipal.repaint();
-
-					}
-
-				});
-
-				panelPrincipal.repaint();
-
-			} catch (NumberFormatException nb) {
-
-				JOptionPane.showMessageDialog(null,"Veuillez saisir un entier pour la valeur du rayon du mode manuel !");
-			}
-
-		}
-
-		// Pression du button "Clean"
-		if (e.getActionCommand().equals(bu_clean.getActionCommand())) {
-
-			window.clean();
-			panelPrincipal.repaint();
-		}
-
-		//Pression du button "Lancer Simulation"
-		if (e.getActionCommand().equals(bu_simul.getActionCommand())) {
-			window.lancementSimulation();
+		//Si c'est le timer qui declenche l'evenement
+		if(e.getSource().getClass() == t.getClass()){
 			panelPrincipal.revalidate();
 			panelPrincipal.repaint();
-		}
-
-		// Pression du button "Redimensionner"
-		if (e.getActionCommand().equals(bu_redim.getActionCommand())) {
-			largeur_panel = Integer.parseInt(tf_largeur.getText());
-			hauteur_panel = Integer.parseInt(tf_hauteur.getText());
-
-			if (largeur_panel < LARGEUR_MINIMUM) {
-				JOptionPane.showMessageDialog(null,"Veuillez saisir une largeur supérieure à 800 !");
-				
-			} else if (hauteur_panel < HAUTEUR_MINIMUM) {
-				JOptionPane.showMessageDialog(null,"Veuillez saisir une hauteur supérieure à 800 !");
-				
-			} else {
-				int n = JOptionPane.showConfirmDialog(null,"Attention cette opération va réinitialiser le plan","Avertissement", JOptionPane.OK_CANCEL_OPTION);
-
-				if (n == JOptionPane.OK_OPTION) {
-					window.clean();
-					window.redimensionner(largeur_panel, hauteur_panel);
+		
+		}else{
+		
+		
+			// Pression du button "Placer aleatoirement"
+			if (e.getActionCommand().equals(bu_aleatoire.getActionCommand())) {
+	
+				int valeur_nbrCapteurs = 0;
+				int valeur_rayon = 0;
+	
+				try {
+					valeur_nbrCapteurs = Integer.parseInt(tf_nbrAleatoire.getText());
+					valeur_rayon = Integer.parseInt(tf_rayonAleatoire.getText());
+					String name;
+	
+					int somme = valeur_nbrCapteurs + rang_capteur;
+	
+					for (int i = rang_capteur; i < somme; i++) {
+	
+						name = "Capteur" + rang_capteur;
+						window.addCapteur(name, valeur_rayon*2, rang_capteur, false);
+						rang_capteur += 1;
+					}
+					panelPrincipal.add(window, BorderLayout.CENTER);
 					this.redimensionner();
+					panelPrincipal.repaint();
+	
+				} catch (NumberFormatException nb) {
+	
+					JOptionPane.showMessageDialog(null,"Veuillez saisir un entier pour le nombre de capteurs et la valeur du rayon du mode aléatoire !");
 				}
-
+	
 			}
-		}
+	
+			// Pression du button "Placer manuellement"
+			if (e.getActionCommand().equals(bu_manuel.getActionCommand())) {
+	
+				try {
+					Integer.parseInt(tf_rayonManuel.getText());
+					panelPrincipal.add(window, BorderLayout.CENTER);
+					this.redimensionner();
+					window.addMouseListener(new MouseAdapter() {
+	
+						public void mouseClicked(MouseEvent me) {
+							int valeur_rayon = Integer.parseInt(tf_rayonManuel.getText());
+	
+							int mouseX = me.getX();
+							int mouseY = me.getY();
+							Capteur capteur = new Capteur(rang_capteur, "Capteur "+ rang_capteur, valeur_rayon*2, mouseX, mouseY,false);
+							window.addCapteur(capteur);
+							rang_capteur += 1;
+							panelPrincipal.revalidate();
+							panelPrincipal.repaint();
+	
+						}
+	
+					});
+	
+					panelPrincipal.repaint();
+	
+				} catch (NumberFormatException nb) {
+	
+					JOptionPane.showMessageDialog(null,"Veuillez saisir un entier pour la valeur du rayon du mode manuel !");
+				}
+	
+			}
+	
+			// Pression du button "Clean"
+			if (e.getActionCommand().equals(bu_clean.getActionCommand())) {
+	
+				window.clean();
+				panelPrincipal.repaint();
+				t.stop();
+			}
+	
+			//Pression du button "Lancer Simulation"
+			if (e.getActionCommand().equals(bu_simul.getActionCommand())) {
+				window.lancementSimulation();
+				t.start();
+				panelPrincipal.revalidate();
+				panelPrincipal.repaint();
+			}
+	
+			// Pression du button "Redimensionner"
+			if (e.getActionCommand().equals(bu_redim.getActionCommand())) {
+	
+				if ( Integer.parseInt(tf_largeur.getText()) < LARGEUR_MINIMUM) {
+					JOptionPane.showMessageDialog(null,"Veuillez saisir une largeur supérieure à 800 !");
+					
+				} else if (Integer.parseInt(tf_hauteur.getText()) < HAUTEUR_MINIMUM) {
+					JOptionPane.showMessageDialog(null,"Veuillez saisir une hauteur supérieure à 800 !");
+					
+				} else {
+					int n = JOptionPane.showConfirmDialog(null,"Attention cette opération va réinitialiser le plan","Avertissement", JOptionPane.OK_CANCEL_OPTION);
+	
+					if (n == JOptionPane.OK_OPTION) {
+						largeur_panel = Integer.parseInt(tf_largeur.getText());
+						hauteur_panel = Integer.parseInt(tf_hauteur.getText());
+						window.clean();
+						window.redimensionner(largeur_panel, hauteur_panel);
+						this.redimensionner();
+					}
+	
+				}
+			}
+			
+			
+			}
 	}
 
 	public static int getLargeur_panel() {
@@ -297,7 +313,15 @@ public class Fenetre extends JFrame implements ActionListener {
 	}
 
 	public void redimensionner() {
-		int hauteur_totale = hauteur_panel + taille_menu;
-		this.setSize(largeur_panel, hauteur_totale);
+		
+		if( (Integer.parseInt(tf_largeur.getText()) >= LARGEUR_MINIMUM) && (Integer.parseInt(tf_hauteur.getText()) >= HAUTEUR_MINIMUM ) ){
+			
+			int hauteur_totale = hauteur_panel + taille_menu;
+			this.setSize(largeur_panel, hauteur_totale);
+		}else {
+			JOptionPane.showMessageDialog(null,"Veuillez saisir des valeurs supérieures à 800 !");
+		}
+		
+		
 	}
 }
