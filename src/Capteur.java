@@ -55,25 +55,42 @@ public class Capteur extends Thread {
 	}
 
 	public synchronized void draw(Graphics2D g) {
-
+		
+		//variables pour ecrire le drawString
+		String currentStatut = "";
+		int coordStringX = coordX;
+		int coordStringY = coordY;
+		
+		
 		if (this.isBip()) {
 			g.setColor(Color.RED);
 			this.waveOne.draw(g);
 		} else {
 			g.setColor(Color.BLUE);
+			
+			if (this.isReceiving()) {
+				//g.drawString("reception", coordX, coordY);
+				currentStatut = "Reception";
+			}
+			else if (this.isPeripheralCollision()) {
+				//g.drawString("PERIPHERAL COLLISION", coordX - 5, coordY - 10);
+				currentStatut = "PERIPHERAL COLLISION";
+				coordStringX = coordX - 5;
+				coordStringY = coordY - 10;
+			}
+			else if (this.isInternalCollision()) {
+				//g.drawString("INTERNAL COLLISION", coordX - 5, coordY - 10);
+				currentStatut = "INTERNAL COLLISION";
+				coordStringX = coordX - 5;
+				coordStringY = coordY - 10;
+			}
+			else
+			{
+				currentStatut = "";
+			}
 		}
-
-		if (this.isReceiving()) {
-			g.drawString("reception", coordX, coordY);
-		}
-
-		if (this.isPeripheralCollision()) {
-			g.drawString("PERIPHERAL COLLISION", coordX - 5, coordY - 10);
-		}
-
-		if (this.isInternalCollision()) {
-			g.drawString("INTERNAL COLLISION", coordX - 5, coordY - 10);
-		}
+		
+		g.drawString(currentStatut, coordStringX, coordStringY);		
 
 		g.draw(new Rectangle2D.Double(coordX - 2, coordY - 2, 3, 3));
 		this.circle.draw(g);
