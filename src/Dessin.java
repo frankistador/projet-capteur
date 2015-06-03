@@ -27,13 +27,10 @@ public class Dessin extends JPanel {
 	public void addCapteur(String name, int rayon, int id, boolean bip) {
 		newCapteur = new Capteur(id, name, rayon, bip);
 		threads.add(newCapteur);
-		newCapteur.start();
-
 	}
 
 	public void addCapteur(Capteur capteur) {
 		threads.add(capteur);
-		capteur.start();
 	}
 
 	public void clean() {
@@ -48,6 +45,7 @@ public class Dessin extends JPanel {
 	public void lancementSimulation() {
 		int cpt = 0;
 		for (int i = 0; i < threads.size(); i++) {
+			threads.get(i).start();
 
 			for (int j = 0; j < threads.size(); j++) {
 				if (i != j) {
@@ -69,4 +67,15 @@ public class Dessin extends JPanel {
 
 		}
 	}
+	
+	
+	public void stopperCapteurs(){
+		for (Capteur capteur : threads) {
+			capteur.interrupt();
+		}
+	}
+	
+//	public void startCapteurs(){
+//		threads.notifyAll();
+//	}
 }

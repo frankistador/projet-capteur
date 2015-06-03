@@ -5,6 +5,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
@@ -28,8 +30,10 @@ public class Fenetre extends JFrame implements ActionListener {
 	private JLabel lb_menu;
 	private JLabel lb_aleatoire;
 	private JLabel lb_aleatoireSuite;
+	private JLabel lb_aleatoireFin;
 	private JLabel lb_redim;
 	private JLabel lb_manuel;
+	private JLabel lb_manuelFin;
 	private JLabel lb_x;
 	private JLabel lb_y;
 
@@ -38,6 +42,8 @@ public class Fenetre extends JFrame implements ActionListener {
 	private JButton bu_clean;
 	private JButton bu_redim;
 	private JButton bu_simul;
+	private JButton bu_stop;
+//	private JButton bu_start;
 
 	private JPanel panelPrincipal = new JPanel();
 	private JPanel panelMenu = new JPanel();
@@ -95,13 +101,15 @@ public class Fenetre extends JFrame implements ActionListener {
 		panelAleatoire.add(tf_nbrAleatoire);
 		tf_nbrAleatoire.setColumns(3);
 
-		lb_aleatoireSuite = new JLabel(
-				"points aléatoirement avec un rayon de communication de :");
+		lb_aleatoireSuite = new JLabel("points aléatoirement avec un rayon de communication de :");
 		panelAleatoire.add(lb_aleatoireSuite);
 
 		tf_rayonAleatoire = new JTextField();
 		panelAleatoire.add(tf_rayonAleatoire);
 		tf_rayonAleatoire.setColumns(3);
+		
+		lb_aleatoireFin = new JLabel("pixels");
+		panelAleatoire.add(lb_aleatoireFin);
 
 		bu_aleatoire = new JButton("Placer aléatoirement");
 		panelAleatoire.add(bu_aleatoire);
@@ -119,6 +127,9 @@ public class Fenetre extends JFrame implements ActionListener {
 		tf_rayonManuel = new JTextField();
 		panelManuel.add(tf_rayonManuel);
 		tf_rayonManuel.setColumns(3);
+		
+		lb_manuelFin = new JLabel("pixels");
+		panelManuel.add(lb_manuelFin);
 
 		bu_manuel = new JButton("Placer manuellement");
 		panelManuel.add(bu_manuel);
@@ -159,9 +170,19 @@ public class Fenetre extends JFrame implements ActionListener {
 		bu_simul = new JButton("Lancer la simulation");
 		panelSimulation.add(bu_simul);
 		bu_simul.addActionListener(this);
-		bu_clean = new JButton("Stop & Clean");
-		panelSimulation.add(bu_clean);
+		bu_clean = new JButton("Clean");
+		bu_clean.setEnabled(false);
 		bu_clean.addActionListener(this);
+		panelSimulation.add(bu_clean);
+		
+//		bu_start = new JButton("Start");
+//		bu_start.addActionListener(this);
+//		panelSimulation.add(bu_start);
+		
+		bu_stop = new JButton("Stop");
+		bu_stop.setEnabled(false);
+		bu_stop.addActionListener(this);
+		panelSimulation.add(bu_stop);
 
 		panelMenu.add(panelSimulation);
 
@@ -171,6 +192,14 @@ public class Fenetre extends JFrame implements ActionListener {
 
 		panelPrincipal.add(panelMenu, BorderLayout.PAGE_START);
 		this.getContentPane().add(panelPrincipal);
+
+		// Stop des theads et du timer a la fermeture de la fenetre
+		this.addWindowListener(new WindowAdapter() {
+			public void windowClosing(WindowEvent e) {
+				window.stopperCapteurs();
+				t.stop();
+			}
+		});
 
 	}
 	
@@ -203,6 +232,7 @@ public class Fenetre extends JFrame implements ActionListener {
 	
 				int valeur_nbrCapteurs = 0;
 				int valeur_rayon = 0;
+				bu_clean.setEnabled(true);
 	
 				try {
 					valeur_nbrCapteurs = Integer.parseInt(tf_nbrAleatoire.getText());
@@ -230,6 +260,8 @@ public class Fenetre extends JFrame implements ActionListener {
 	
 			// Pression du button "Placer manuellement"
 			if (e.getActionCommand().equals(bu_manuel.getActionCommand())) {
+				
+				bu_clean.setEnabled(true);
 	
 				try {
 					Integer.parseInt(tf_rayonManuel.getText());
@@ -265,14 +297,41 @@ public class Fenetre extends JFrame implements ActionListener {
 			if (e.getActionCommand().equals(bu_clean.getActionCommand())) {
 	
 				window.clean();
+				bu_aleatoire.setEnabled(true);
+				bu_manuel.setEnabled(true);
+				bu_redim.setEnabled(true);
+				bu_simul.setEnabled(true);
+				bu_clean.setEnabled(false);
+				bu_stop.setEnabled(false);
 				panelPrincipal.repaint();
 				t.stop();
 			}
+			
+			// Pression du button "Stop"
+			if (e.getActionCommand().equals(bu_stop.getActionCommand())) {
+				t.stop();
+				window.stopperCapteurs();
+			}
+			
+//			// Pression du button "Stop"
+//			if (e.getActionCommand().equals(bu_start.getActionCommand())) {
+//				System.out.println("start");
+//				window.startCapteurs();
+//				t.start();
+//			}
 	
 			//Pression du button "Lancer Simulation"
 			if (e.getActionCommand().equals(bu_simul.getActionCommand())) {
 				window.lancementSimulation();
+				bu_aleatoire.setEnabled(false);
+				bu_manuel.setEnabled(false);
+				bu_redim.setEnabled(false);
+				bu_simul.setEnabled(false);
+				bu_clean.setEnabled(true);
+				bu_stop.setEnabled(true);;
+				
 				t.start();
+				
 				panelPrincipal.revalidate();
 				panelPrincipal.repaint();
 			}
