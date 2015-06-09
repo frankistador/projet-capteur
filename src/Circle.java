@@ -29,6 +29,14 @@ public class Circle implements Shape {
 	    this.timer = this.createTimer();
 	    this.timer.start();
 	}
+	
+	public Circle(double x, double y, double radius)
+	{
+	    this.x = x;
+	    this.y = y;
+	    this.radius = radius;
+	    this.radiusOrigin = radius;
+	}
 
 	
 	//Clignote et avancement du cercle

@@ -270,6 +270,7 @@ public class Fenetre extends JFrame implements ActionListener {
 					window.addMouseListener(new MouseAdapter() {
 	
 						public void mouseClicked(MouseEvent me) {
+							if(bu_manuel.isEnabled()){
 							int valeur_rayon = Integer.parseInt(tf_rayonManuel.getText());
 	
 							int mouseX = me.getX();
@@ -279,7 +280,7 @@ public class Fenetre extends JFrame implements ActionListener {
 							rang_capteur += 1;
 							panelPrincipal.revalidate();
 							panelPrincipal.repaint();
-	
+							}
 						}
 	
 					});
@@ -322,18 +323,19 @@ public class Fenetre extends JFrame implements ActionListener {
 	
 			//Pression du button "Lancer Simulation"
 			if (e.getActionCommand().equals(bu_simul.getActionCommand())) {
-				window.lancementSimulation();
+			
 				bu_aleatoire.setEnabled(false);
 				bu_manuel.setEnabled(false);
 				bu_redim.setEnabled(false);
 				bu_simul.setEnabled(false);
 				bu_clean.setEnabled(true);
 				bu_stop.setEnabled(true);;
-				
-				t.start();
-				
+				window.lancerCapteurs();
 				panelPrincipal.revalidate();
 				panelPrincipal.repaint();
+				t.start();
+				
+				
 			}
 	
 			// Pression du button "Redimensionner"
