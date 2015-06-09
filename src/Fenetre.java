@@ -259,7 +259,7 @@ public class Fenetre extends JFrame implements ActionListener {
 			}
 	
 			// Pression du button "Placer manuellement"
-			if (e.getActionCommand().equals(bu_manuel.getActionCommand())) {
+			if (e.getActionCommand().equals(bu_manuel.getActionCommand()) ) {
 				
 				bu_clean.setEnabled(true);
 	
@@ -270,6 +270,8 @@ public class Fenetre extends JFrame implements ActionListener {
 					window.addMouseListener(new MouseAdapter() {
 	
 						public void mouseClicked(MouseEvent me) {
+							
+							if (bu_manuel.isEnabled()){
 							int valeur_rayon = Integer.parseInt(tf_rayonManuel.getText());
 	
 							int mouseX = me.getX();
@@ -279,6 +281,7 @@ public class Fenetre extends JFrame implements ActionListener {
 							rang_capteur += 1;
 							panelPrincipal.revalidate();
 							panelPrincipal.repaint();
+							}
 	
 						}
 	
