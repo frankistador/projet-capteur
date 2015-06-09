@@ -21,7 +21,6 @@ public class Capteur extends Thread {
 	private boolean internalCollision = false;
 
 	private Circle circle;
-	private Timer timer;
 	private Circle waveOne;
 
 
@@ -35,8 +34,7 @@ public class Capteur extends Thread {
 		this.bip = bip;
 		this.circle = new Circle(coordX, coordY, rayon,false);
 		this.waveOne = new Circle(coordX,coordY,rayon,true);
-		this.timer = createTimer();
-		timer.start();
+
 	}
 	
 	
@@ -50,50 +48,38 @@ public class Capteur extends Thread {
 		this.bip = bip;
 		this.circle = new Circle(coordX,coordY,rayon,false);
 		this.waveOne = new Circle(coordX,coordY,rayon,true);
-		this.timer = createTimer();
-		timer.start();
+
 	}
 
 	public synchronized void draw(Graphics2D g) {
 		
-		//variables pour ecrire le drawString
-		String currentStatut = "";
-		int coordStringX = coordX;
-		int coordStringY = coordY;
-		
-		
+	
 		if (this.isBip()) {
 			g.setColor(Color.RED);
 			this.waveOne.draw(g);
-		} else {
+		} 
+		else
+		{
 			g.setColor(Color.BLUE);
-			
-			if (this.isReceiving()) {
-				//g.drawString("reception", coordX, coordY);
-				currentStatut = "Reception";
-			}
-			else if (this.isPeripheralCollision()) {
-				//g.drawString("PERIPHERAL COLLISION", coordX - 5, coordY - 10);
-				currentStatut = "PERIPHERAL COLLISION";
-				coordStringX = coordX - 5;
-				coordStringY = coordY - 10;
-			}
-			else if (this.isInternalCollision()) {
-				//g.drawString("INTERNAL COLLISION", coordX - 5, coordY - 10);
-				currentStatut = "INTERNAL COLLISION";
-				coordStringX = coordX - 5;
-				coordStringY = coordY - 10;
-			}
-			else
-			{
-				currentStatut = "";
-			}
 		}
-		
-		g.drawString(currentStatut, coordStringX, coordStringY);		
 
-		g.draw(new Rectangle2D.Double(coordX - 2, coordY - 2, 3, 3));
-		this.circle.draw(g);
+
+			if(this.isReceiving()){
+				g.drawString("Reception", coordX, coordY);
+			}
+		
+			if(this.isPeripheralCollision()){
+				g.drawString("PERIPHERAL COLLISION", coordX - 5, coordY - 10);
+			}
+			
+			if(this.isInternalCollision()){
+				g.drawString("INTERNAL COLLISION", coordX - 5, coordY - 10);
+			}
+		
+		    
+		
+        g.draw(new Rectangle2D.Double(coordX-2, coordY-2, 3, 3));	
+        this.circle.draw(g);
 
 	}
 
@@ -112,22 +98,7 @@ public class Capteur extends Thread {
 	// return capteursProches;
 	// }
 	
-	private Timer createTimer() {
-		
-		ActionListener action = new ActionListener() {
-			
-			//Méthode pour chaque tic de timer
-			public void actionPerformed (ActionEvent event)
-			{
-				move();				
-			}
 
-		};
-
-		return new Timer(500, action);
-	}
-	
-	int vitesse = 50;
 	public void move()
 	{
 //		int move;
@@ -147,14 +118,29 @@ public class Capteur extends Thread {
 	}
 	
 
-	public void beeping() {
-
-		this.bip = true;
-
+	public synchronized void beep(){
+		Beep.beep(this);
 	}
 
-	public void ecouter() {
-		this.bip = false;
+	public synchronized void listen(){
+		Beep.listen(this);
+	}
+	
+	public synchronized void pileOuface(){
+		double pileOuFace;
+		double probaDuBip = 0.5;
+		
+		 pileOuFace = Math.random();
+		 
+			if(pileOuFace > probaDuBip)
+			{
+				this.bip = true;
+			}
+			else
+			{
+				this.bip = false;
+			}
+			
 	}
 
 	public void calculer() {
@@ -244,27 +230,31 @@ public class Capteur extends Thread {
 	// La fonction run du thread
 	public void run() {
 		
-		while(true) {
-
-			double pileOuFace;
-			double probaDuBip = 0.5;
-	
-			pileOuFace = Math.random();
-	
-			if (pileOuFace > probaDuBip) {
-				this.beeping();
-			} else {
-				this.ecouter();
-			}
-	
+		
+		while(true){
+			this.pileOuface();
+			
 			try {
-				Thread.sleep(5000);// 5 secondes
-	
-			} catch (InterruptedException ex) {
-				Thread.currentThread().interrupt();
+				Thread.sleep(2000);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
-
+			
+			if(this.isBip()){
+				this.beep();
+			}
+			
+			try {
+				Thread.sleep(2000);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			this.listen();
 		}
+		
 		// ---Test déplacement---
 		// System.out.println("Avant: "+this.coordX);
 		// this.setX(this.coordX +500);

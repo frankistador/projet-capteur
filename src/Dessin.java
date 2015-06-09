@@ -9,6 +9,7 @@ public class Dessin extends JPanel {
 
 	private Capteur newCapteur;
 	private LinkedList<Capteur> threads = new LinkedList<Capteur>();
+	private static boolean dessinSimul = false;
 
 	public Dessin() {
 
@@ -22,58 +23,64 @@ public class Dessin extends JPanel {
 			it.next().draw(g2D);
 
 		}
+	
 	}
 
 	public void addCapteur(String name, int rayon, int id, boolean bip) {
 		newCapteur = new Capteur(id, name, rayon, bip);
 		threads.add(newCapteur);
+	//	 newCapteur.start();
 	}
 
 	public void addCapteur(Capteur capteur) {
 		threads.add(capteur);
-	}
-
-	public void clean() {
-		threads.clear();
+		//capteur.start();
 	}
 
 	public void redimensionner(int larg, int haut) {
 		this.setSize(larg, haut);
 
 	}
-
-	public void lancementSimulation() {
-		int cpt = 0;
-		for (int i = 0; i < threads.size(); i++) {
-			threads.get(i).start();
-
-			for (int j = 0; j < threads.size(); j++) {
-				if (i != j) {
-					if (threads.get(i).getCircle().contains(threads.get(j).getCoordX(),threads.get(j).getCoordY())&& threads.get(j).isBip()) {
-						if (!threads.get(i).isBip()) {
-							threads.get(i).setReceiving(true);
-							cpt++;
-						} else {
-							threads.get(i).setInternalCollision(true);
-						}
-					}
-				}
-			}
-			if (cpt > 1) {
-				threads.get(i).setPeripheralCollision(true);
-				threads.get(i).setReceiving(false);
-			}
-			cpt = 0;
-
-		}
-	}
 	
+	public static boolean isDessinSimul() {
+		return dessinSimul;
+	}
+
+	public static void setDessinSimul(boolean dessinSimul) {
+		Dessin.dessinSimul = dessinSimul;
+	}
 	
 	public void stopperCapteurs(){
-		for (Capteur capteur : threads) {
-			capteur.interrupt();
-		}
+		 java.util.ListIterator<Capteur> it = threads.listIterator();
+	        while(it.hasNext())
+	        {
+	        		it.next().interrupt();
+	        		
+	        }
 	}
+	
+	public void lancerCapteurs(){
+		 java.util.ListIterator<Capteur> it = threads.listIterator();
+	        while(it.hasNext())
+	        {
+	        		it.next().start();
+	        		
+	        }
+	}
+
+  	    
+	  public void clean(){
+		  java.util.ListIterator<Capteur> it = threads.listIterator();
+	        while(it.hasNext())
+	        {
+	        		it.next().interrupt();
+	        		
+	        }
+		  threads.clear();
+		  Beep.clear();
+		  this.repaint();
+		  this.revalidate();
+	  }
 	
 //	public void startCapteurs(){
 //		threads.notifyAll();
