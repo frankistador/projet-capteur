@@ -54,6 +54,10 @@ public class Capteur extends Thread {
 	public synchronized void draw(Graphics2D g) {
 		
 	
+		String currentStatut = "";
+		int coordStringX = coordX;
+		int coordStringY = coordY;
+		
 		if (this.isBip()) {
 			g.setColor(Color.RED);
 			this.waveOne.draw(g);
@@ -63,20 +67,34 @@ public class Capteur extends Thread {
 			g.setColor(Color.BLUE);
 		}
 
+		g.drawString(currentStatut, coordStringX, coordStringY);
 
-			if(this.isReceiving()){
-				g.drawString("Reception", coordX, coordY);
-			}
+		if (this.isPeripheralCollision()) {
+			//g.drawString("PERIPHERAL COLLISION", coordX - 5, coordY - 10);
+			currentStatut = "PERIPHERAL COLLISION";
+			coordStringX = coordX - 5;
+			coordStringY = coordY - 10;
+		}
+		else if (this.isInternalCollision()) {
+			//g.drawString("INTERNAL COLLISION", coordX - 5, coordY - 10);
+			currentStatut = "INTERNAL COLLISION";
+			coordStringX = coordX - 5;
+			coordStringY = coordY - 10;
+		}
+
+		else if (this.isReceiving()) {
+			//g.drawString("reception", coordX, coordY);
+			currentStatut = "Reception";
+		}
 		
-			if(this.isPeripheralCollision()){
-				g.drawString("PERIPHERAL COLLISION", coordX - 5, coordY - 10);
-			}
-			
-			if(this.isInternalCollision()){
-				g.drawString("INTERNAL COLLISION", coordX - 5, coordY - 10);
-			}
-		
+	
+
+	
+
+
+
 		    
+		g.drawString(currentStatut, coordStringX, coordStringY);
 		
         g.draw(new Rectangle2D.Double(coordX-2, coordY-2, 3, 3));	
         this.circle.draw(g);
@@ -231,29 +249,40 @@ public class Capteur extends Thread {
 	public void run() {
 		
 		
-		while(true){
+		//while(true){
 			this.pileOuface();
 			
 			try {
-				Thread.sleep(2000);
+				Thread.sleep(1000);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			
 			if(this.isBip()){
-				this.beep();
+				System.out.println("beeep beeep beep ------>"+this.getName());
+				this.beep();				
 			}
 			
 			try {
-				Thread.sleep(2000);
+				Thread.sleep(1000);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			
 			this.listen();
-		}
+			System.out.println("listen ------>"+this.getName());
+			try {
+				Thread.sleep(3000);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			Beep.clear();
+			
+		//}
 		
 		// ---Test déplacement---
 		// System.out.println("Avant: "+this.coordX);

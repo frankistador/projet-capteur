@@ -3,20 +3,25 @@ import java.util.HashMap;
 
 public class Beep {
 
-	private static HashMap<Integer,Integer> beepList = new HashMap<Integer,Integer>();
+	private static HashMap<int[],Integer> beepList = new HashMap<int[],Integer>();
 	
-	static void beep(Capteur c){		
-		beepList.put(c.getCoordX(),c.getCoordY());
+	static void beep(Capteur c){
+		int aux[] = {0,0};
+		aux[0] = c.getCoordX();
+		aux[1] = c.getCoordY();
+		beepList.put(aux,c.getRayon());
 	}
 	
 	 static void listen(Capteur c){
 		 int cpt = 0;
 		 Circle circle;
-		 for (Integer mapKey : beepList.keySet()) {
-			 //circle=new Circle()
-			 if(c.getCircle().contains(mapKey,beepList.get(mapKey))){	
+		 for (int[] mapKey : beepList.keySet()) {
+			 
+			 circle=new Circle(mapKey[0],mapKey[1],beepList.get(mapKey));
+			 
+			 if(circle.contains(c.getCoordX(),c.getCoordY())){	
 				 if(c.isBip()){
-					 if( c.getCoordX() != mapKey && c.getCoordY() != beepList.get(mapKey))
+					 if( c.getCoordX() != circle.getX() && c.getCoordY() != circle.getY() && c.getCircle().contains(circle.getX(), circle.getY()))
 	     				c.setInternalCollision(true);		
 	     			}
 				 else{
