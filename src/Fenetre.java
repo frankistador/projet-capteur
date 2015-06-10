@@ -300,6 +300,7 @@ public class Fenetre extends JFrame implements ActionListener {
 				bu_redim.setEnabled(true);
 				bu_simul.setEnabled(true);
 				bu_clean.setEnabled(false);
+				bu_manuel.setEnabled(true);
 				//bu_stop.setEnabled(false);
 				panelPrincipal.repaint();
 				t.stop();
