@@ -11,6 +11,7 @@ import java.awt.event.WindowEvent;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -51,6 +52,10 @@ public class Fenetre extends JFrame implements ActionListener {
 	private JPanel panelManuel = new JPanel();
 	private JPanel panelDimension = new JPanel();
 	private JPanel panelSimulation = new JPanel();
+	
+	private static JComboBox algoListe; 
+	String [] algos = {"BL","BcdL","BLcd","BcdLcd"};
+
 
 	public static int largeur_panel = 800;
 	public static int hauteur_panel = 800;
@@ -179,6 +184,9 @@ public class Fenetre extends JFrame implements ActionListener {
 		//bu_stop.setEnabled(false);
 		//bu_stop.addActionListener(this);
 		//panelSimulation.add(bu_stop);
+		
+		algoListe = new JComboBox(algos); 
+		panelSimulation.add(algoListe);
 
 		panelMenu.add(panelSimulation);
 
@@ -375,4 +383,9 @@ public class Fenetre extends JFrame implements ActionListener {
 		
 		
 	}
+	
+	public static String getAlgoListe() {
+		return algoListe.getSelectedItem().toString();
+	}
+	
 }

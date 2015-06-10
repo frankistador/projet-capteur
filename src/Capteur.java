@@ -111,7 +111,16 @@ public class Capteur extends Thread {
 	}
 
 	public synchronized void listen(){
-		Beep.listen(this);
+		if(Fenetre.getAlgoListe().toString().equals("BL")){
+			Beep.listenBL(this);
+		}else if(Fenetre.getAlgoListe().toString().equals("BLcd")){
+			Beep.listenBLcd(this);
+		}else if(Fenetre.getAlgoListe().toString().equals("BcdL")){
+			Beep.listenBcdL(this);
+		}else if(Fenetre.getAlgoListe().toString().equals("BcdLcd")){
+			Beep.listenBcdLcd(this);
+		}
+		
 	}
 	
 	public synchronized void pileOuface(double probaDuBip){
