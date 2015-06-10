@@ -25,15 +25,23 @@ public class Beep {
 	     				c.setInternalCollision(true);		
 	     			}
 				 else{
-				 c.setReceiving(true);
-     			cpt++;
+				 //c.setReceiving(true);
+     		     cpt++;
 				 }
 			 }
 		 }
-		 if(cpt > 1){
-     		c.setPeripheralCollision(true);
-     		c.setReceiving(false);	        		
-     	}
+		if(!c.isInternalCollision())
+		{
+			if(cpt == 1)
+			{
+				c.setReceiving(true);
+			}
+			else if (cpt>1)
+			{
+				c.setPeripheralCollision(true);
+			}
+		}
+
 		 
 		 
 	 }

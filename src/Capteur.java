@@ -67,73 +67,43 @@ public class Capteur extends Thread {
 			g.setColor(Color.BLUE);
 		}
 
-		g.drawString(currentStatut, coordStringX, coordStringY);
+		
 
 		if (this.isPeripheralCollision()) {
-			//g.drawString("PERIPHERAL COLLISION", coordX - 5, coordY - 10);
 			currentStatut = "PERIPHERAL COLLISION";
-			coordStringX = coordX - 5;
-			coordStringY = coordY - 10;
-		}
-		else if (this.isInternalCollision()) {
-			//g.drawString("INTERNAL COLLISION", coordX - 5, coordY - 10);
-			currentStatut = "INTERNAL COLLISION";
-			coordStringX = coordX - 5;
-			coordStringY = coordY - 10;
-		}
 
-		else if (this.isReceiving()) {
-			//g.drawString("reception", coordX, coordY);
+		}
+		if (this.isInternalCollision()) {
+			currentStatut = "INTERNAL COLLISION";
+
+		}
+		if (this.isReceiving()) {
 			currentStatut = "Reception";
 		}
 		
-	
 
-	
-
-
-
+		if( this.isReceiving() == false)
+		{
+			if( this.isInternalCollision() == false)
+			{
+				if( this.isPeripheralCollision() == false)
+				{
+					currentStatut = "";
+				}
+				
+			}
+			
+		}
+		
 		    
-		g.drawString(currentStatut, coordStringX, coordStringY);
+		g.drawString(this.getNameCapteur() +": "+currentStatut, coordStringX, coordStringY);
 		
         g.draw(new Rectangle2D.Double(coordX-2, coordY-2, 3, 3));	
         this.circle.draw(g);
 
 	}
 
-	// public ArrayList<Capteur> silentListening(ArrayList<Capteur>
-	// capteursProches)
-	// {
-	// this.bip = false;
-	//
-	// System.out.println("Ecoute " + this.idCapteur);
-	//
-	// int _rayon = this.rayon;
-	// int _x = this.coordX;
-	// int _y = this.coordY;
-	//
-	//
-	// return capteursProches;
-	// }
-	
-
-	public void move()
-	{
-//		int move;
-//		if(this.coordX >= Fenetre.getLargeur_panel())
-//		{
-//			vitesse = -vitesse;
-//		}
-//		if(this.coordX <= 500)
-//		{
-//			vitesse = +vitesse;
-//		}
-//		move = vitesse;
-//		this.setCoordX(this.coordX+move);
-		
-		
-		//this.setCoordY(coordY+10);
-	}
+	 
 	
 
 	public synchronized void beep(){
@@ -144,25 +114,20 @@ public class Capteur extends Thread {
 		Beep.listen(this);
 	}
 	
-	public synchronized void pileOuface(){
+	public synchronized void pileOuface(double probaDuBip){
 		double pileOuFace;
-		double probaDuBip = 0.5;
 		
 		 pileOuFace = Math.random();
 		 
 			if(pileOuFace > probaDuBip)
 			{
-				this.bip = true;
+				this.bip = false;
 			}
 			else
 			{
-				this.bip = false;
+				this.bip = true;
 			}
 			
-	}
-
-	public void calculer() {
-		// Faire le lien avec la classe Algo et tous ses calculs
 	}
 
 	public int getIdCapteur() {
@@ -247,49 +212,48 @@ public class Capteur extends Thread {
 
 	// La fonction run du thread
 	public void run() {
+		int div = 1;
 		
-		
-		//while(true){
-			this.pileOuface();
+		while(true){
+			this.pileOuface(0.5/div);
 			
 			try {
-				Thread.sleep(1000);
+				Thread.sleep(100);
 			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			
 			if(this.isBip()){
-				System.out.println("beeep beeep beep ------>"+this.getName());
 				this.beep();				
 			}
 			
 			try {
-				Thread.sleep(1000);
+				Thread.sleep(100);
 			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			
 			this.listen();
-			System.out.println("listen ------>"+this.getName());
 			try {
-				Thread.sleep(3000);
+				Thread.sleep(5000);
 			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+			if(this.isInternalCollision() || this.isPeripheralCollision())
+				div++;
+			
+				System.out.println(this.getNameCapteur()+"---->"+0.5/div);
+						
+			//On remet tout à faux pour la prochaine session
+			this.setInternalCollision(false);
+			this.setPeripheralCollision(false);
+			this.setReceiving(false);
 			
 			Beep.clear();
 			
-		//}
+		}
 		
-		// ---Test déplacement---
-		// System.out.println("Avant: "+this.coordX);
-		// this.setX(this.coordX +500);
-		// System.out.println("Après: "+this.coordX);
-		// panel.addCapteur(this.nameCapteur, this.rayon, this.idCapteur,
-		// this.bip);
+
 
 	}
 

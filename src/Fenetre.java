@@ -42,7 +42,7 @@ public class Fenetre extends JFrame implements ActionListener {
 	private JButton bu_clean;
 	private JButton bu_redim;
 	private JButton bu_simul;
-	private JButton bu_stop;
+	//private JButton bu_stop;
 //	private JButton bu_start;
 
 	private JPanel panelPrincipal = new JPanel();
@@ -174,15 +174,11 @@ public class Fenetre extends JFrame implements ActionListener {
 		bu_clean.setEnabled(false);
 		bu_clean.addActionListener(this);
 		panelSimulation.add(bu_clean);
-		
-//		bu_start = new JButton("Start");
-//		bu_start.addActionListener(this);
-//		panelSimulation.add(bu_start);
-		
-		bu_stop = new JButton("Stop");
-		bu_stop.setEnabled(false);
-		bu_stop.addActionListener(this);
-		panelSimulation.add(bu_stop);
+				
+		//bu_stop = new JButton("Stop");
+		//bu_stop.setEnabled(false);
+		//bu_stop.addActionListener(this);
+		//panelSimulation.add(bu_stop);
 
 		panelMenu.add(panelSimulation);
 
@@ -303,23 +299,17 @@ public class Fenetre extends JFrame implements ActionListener {
 				bu_redim.setEnabled(true);
 				bu_simul.setEnabled(true);
 				bu_clean.setEnabled(false);
-				bu_stop.setEnabled(false);
+				//bu_stop.setEnabled(false);
 				panelPrincipal.repaint();
 				t.stop();
 			}
 			
 			// Pression du button "Stop"
-			if (e.getActionCommand().equals(bu_stop.getActionCommand())) {
-				t.stop();
-				window.stopperCapteurs();
-			}
+			//if (e.getActionCommand().equals(bu_stop.getActionCommand())) {
+			//	t.stop();
+			//	window.stopperCapteurs();
+			//}
 			
-//			// Pression du button "Stop"
-//			if (e.getActionCommand().equals(bu_start.getActionCommand())) {
-//				System.out.println("start");
-//				window.startCapteurs();
-//				t.start();
-//			}
 	
 			//Pression du button "Lancer Simulation"
 			if (e.getActionCommand().equals(bu_simul.getActionCommand())) {
@@ -329,7 +319,7 @@ public class Fenetre extends JFrame implements ActionListener {
 				bu_redim.setEnabled(false);
 				bu_simul.setEnabled(false);
 				bu_clean.setEnabled(true);
-				bu_stop.setEnabled(true);;
+			//	bu_stop.setEnabled(true);;
 				window.lancerCapteurs();
 				t.start();
 				

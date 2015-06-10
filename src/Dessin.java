@@ -9,7 +9,6 @@ public class Dessin extends JPanel {
 
 	private Capteur newCapteur;
 	private LinkedList<Capteur> threads = new LinkedList<Capteur>();
-	private static boolean dessinSimul = false;
 
 	public Dessin() {
 
@@ -29,25 +28,15 @@ public class Dessin extends JPanel {
 	public void addCapteur(String name, int rayon, int id, boolean bip) {
 		newCapteur = new Capteur(id, name, rayon, bip);
 		threads.add(newCapteur);
-	//	 newCapteur.start();
 	}
 
 	public void addCapteur(Capteur capteur) {
 		threads.add(capteur);
-		//capteur.start();
 	}
 
 	public void redimensionner(int larg, int haut) {
 		this.setSize(larg, haut);
 
-	}
-	
-	public static boolean isDessinSimul() {
-		return dessinSimul;
-	}
-
-	public static void setDessinSimul(boolean dessinSimul) {
-		Dessin.dessinSimul = dessinSimul;
 	}
 	
 	public void stopperCapteurs(){
@@ -82,7 +71,4 @@ public class Dessin extends JPanel {
 		  this.revalidate();
 	  }
 	
-//	public void startCapteurs(){
-//		threads.notifyAll();
-//	}
 }
