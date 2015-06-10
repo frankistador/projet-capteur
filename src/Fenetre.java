@@ -249,6 +249,7 @@ public class Fenetre extends JFrame implements ActionListener {
 					}
 					panelPrincipal.add(window, BorderLayout.CENTER);
 					this.redimensionner();
+					bu_manuel.setEnabled(true);
 					panelPrincipal.repaint();
 	
 				} catch (NumberFormatException nb) {
@@ -270,7 +271,7 @@ public class Fenetre extends JFrame implements ActionListener {
 					window.addMouseListener(new MouseAdapter() {
 	
 						public void mouseClicked(MouseEvent me) {						
-							if (bu_manuel.isEnabled()){
+							if (bu_simul.isEnabled()){
 							int valeur_rayon = Integer.parseInt(tf_rayonManuel.getText());
 	
 							int mouseX = me.getX();
@@ -284,6 +285,7 @@ public class Fenetre extends JFrame implements ActionListener {
 						}
 	
 					});
+					bu_manuel.setEnabled(false);
 	
 					panelPrincipal.repaint();
 	
@@ -299,7 +301,6 @@ public class Fenetre extends JFrame implements ActionListener {
 	
 				window.clean();
 				bu_aleatoire.setEnabled(true);
-				bu_manuel.setEnabled(true);
 				bu_redim.setEnabled(true);
 				bu_simul.setEnabled(true);
 				bu_clean.setEnabled(false);
